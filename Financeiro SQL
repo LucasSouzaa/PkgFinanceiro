@@ -1,0 +1,298 @@
+-- MySQL Administrator dump 1.4
+--
+-- ------------------------------------------------------
+-- Server version	5.6.22-log
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+
+
+
+
+--
+-- Table structure for table `barsystems`.`caixas`
+--
+
+DROP TABLE IF EXISTS `caixas`;
+CREATE TABLE `caixas` (
+  `id_caixa` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id_centro_custo` int(11) NOT NULL DEFAULT '0',
+  `data_abertura` datetime NOT NULL,
+  `data_fechamento` datetime DEFAULT NULL,
+  `fechado` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `excluido` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `data_cadastro` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id_caixa`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `barsystems`.`caixas`
+--
+
+
+
+
+--
+-- Table structure for table `barsystems`.`cartoes`
+--
+
+DROP TABLE IF EXISTS `cartoes`;
+CREATE TABLE `cartoes` (
+  `id_cartao` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id_forma_pagamento` int(10) unsigned NOT NULL,
+  `taxa` float NOT NULL DEFAULT '0',
+  `dias_receber` int(10) unsigned NOT NULL DEFAULT '1',
+  `excluido` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id_cartao`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `barsystems`.`cartoes`
+--
+
+
+
+
+--
+-- Table structure for table `barsystems`.`centros_custo`
+--
+
+DROP TABLE IF EXISTS `centros_custo`;
+CREATE TABLE `centros_custo` (
+  `id_centro_custo` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `nome` varchar(45) NOT NULL,
+  `tipo` varchar(15) NOT NULL DEFAULT 'Caixa',
+  `saldo` double NOT NULL DEFAULT '0',
+  `padrao` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `excluido` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id_centro_custo`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `barsystems`.`centros_custo`
+--
+
+
+
+
+--
+-- Table structure for table `barsystems`.`despesas`
+--
+
+DROP TABLE IF EXISTS `despesas`;
+CREATE TABLE `despesas` (
+  `id_despesa` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id_compra_fk` int(11) DEFAULT NULL,
+  `descricao` text NOT NULL,
+  `responsavel` varchar(50) DEFAULT NULL,
+  `id_fornecedor_fk` int(10) unsigned NOT NULL,
+  `qnt_parcelas` smallint(5) unsigned NOT NULL,
+  `parcela_numero` smallint(5) unsigned NOT NULL,
+  `data_pagamento` datetime DEFAULT NULL,
+  `data_vencimento` datetime NOT NULL,
+  `id_forma_pagamento_fk` varchar(35) NOT NULL,
+  `valor` float NOT NULL,
+  `acrescimo` float NOT NULL,
+  `desconto` float NOT NULL,
+  `fixo` tinyint(4) DEFAULT NULL,
+  `variavel` tinyint(4) DEFAULT NULL,
+  `liquidado` tinyint(1) NOT NULL,
+  `agendado` tinyint(4) DEFAULT '0',
+  `id_setor_fk` int(10) unsigned DEFAULT NULL,
+  `id_usuario_fk` int(10) unsigned NOT NULL,
+  `id_movimentacao_caixa_fk` tinyint(4) NOT NULL,
+  `id_movimentacao_conta_bancaria_fk` tinyint(4) NOT NULL,
+  `excluido` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `data_cadastro` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id_despesa`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `barsystems`.`despesas`
+--
+
+
+
+
+--
+-- Table structure for table `barsystems`.`formas_pagamento`
+--
+
+DROP TABLE IF EXISTS `formas_pagamento`;
+CREATE TABLE `formas_pagamento` (
+  `id_forma_pagamento` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `descricao` varchar(45) NOT NULL,
+  `excluido` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id_forma_pagamento`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `barsystems`.`formas_pagamento`
+--
+
+
+
+
+--
+-- Table structure for table `barsystems`.`movimentacoes_caixa`
+--
+
+DROP TABLE IF EXISTS `movimentacoes_caixa`;
+CREATE TABLE `movimentacoes_caixa` (
+  `id_movimentacao_caixa` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id_caixa` int(10) unsigned NOT NULL,
+  `descricao` varchar(50) NOT NULL,
+  `id_forma_pagamento_fk` tinyint(3) unsigned NOT NULL,
+  `numero_parcelas` tinyint(4) NOT NULL DEFAULT '1',
+  `valor` double NOT NULL,
+  `tipo` varchar(10) NOT NULL,
+  `data_pagamento` datetime NOT NULL,
+  `data_cadastro` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `excluido` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `id_usuario` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id_movimentacao_caixa`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `barsystems`.`movimentacoes_caixa`
+--
+
+
+
+
+--
+-- Table structure for table `barsystems`.`movimentacoes_conta_bancaria`
+--
+
+DROP TABLE IF EXISTS `movimentacoes_conta_bancaria`;
+CREATE TABLE `movimentacoes_conta_bancaria` (
+  `id_movimentacao_conta_bancaria` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id_centro_custo` int(10) unsigned NOT NULL,
+  `descricao` varchar(45) NOT NULL,
+  `id_forma_pagamento_fk` tinyint(3) unsigned NOT NULL,
+  `numero_parcelas` tinyint(3) unsigned NOT NULL,
+  `valor` float NOT NULL,
+  `tipo` varchar(7) NOT NULL,
+  `data_pagamento` datetime NOT NULL,
+  `data_cadastro` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `excluido` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `id_usuario` tinyint(3) unsigned NOT NULL,
+  PRIMARY KEY (`id_movimentacao_conta_bancaria`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `barsystems`.`movimentacoes_conta_bancaria`
+--
+
+
+
+
+--
+-- Table structure for table `barsystems`.`receitas`
+--
+
+DROP TABLE IF EXISTS `receitas`;
+CREATE TABLE `receitas` (
+  `id_receita` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `descricao` varchar(45) NOT NULL,
+  `id_cliente_fk` tinyint(4) NOT NULL DEFAULT '0',
+  `nome_cliente` varchar(45) NOT NULL,
+  `id_setor` int(10) unsigned NOT NULL,
+  `id_forma_pagamento` int(10) unsigned NOT NULL,
+  `valor` float NOT NULL,
+  `acrescimo` float NOT NULL,
+  `desconto` float NOT NULL,
+  `qnt_parcelas` tinyint(3) unsigned NOT NULL,
+  `numero_parcela` tinyint(3) unsigned NOT NULL,
+  `id_movimentacao_caixa_fk` int(10) unsigned NOT NULL,
+  `id_movimentacao_conta_bancaria_fk` tinyint(4) NOT NULL,
+  `excluido` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `data_pagamento` datetime DEFAULT NULL,
+  `data_vencimento` datetime DEFAULT NULL,
+  `liquidado` tinyint(4) NOT NULL DEFAULT '0',
+  `agendado` tinyint(4) DEFAULT '0',
+  `data_cadastro` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id_receita`)
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `barsystems`.`receitas`
+--
+
+
+
+
+--
+-- Table structure for table `barsystems`.`responsaveis_caixa`
+--
+
+DROP TABLE IF EXISTS `responsaveis_caixa`;
+CREATE TABLE `responsaveis_caixa` (
+  `id_centro_custo` int(10) unsigned NOT NULL,
+  `id_usuario` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id_centro_custo`,`id_usuario`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `barsystems`.`responsaveis_caixa`
+--
+
+
+
+--
+-- Table structure for table `barsystems`.`setores_financeiros`
+--
+
+DROP TABLE IF EXISTS `setores_financeiros`;
+CREATE TABLE `setores_financeiros` (
+  `id_setor` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `descricao` varchar(45) NOT NULL,
+  `tipo` varchar(7) NOT NULL,
+  `padrao` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `excluido` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `data_cadastro` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id_setor`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `barsystems`.`setores_financeiros`
+--
+
+
+
+
+--
+-- Table structure for table `barsystems`.`usuarios`
+--
+
+DROP TABLE IF EXISTS `usuarios`;
+CREATE TABLE `usuarios` (
+  `id_usuario` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `nome` varchar(15) NOT NULL,
+  `senha` varchar(15) NOT NULL,
+  `tipo` varchar(15) NOT NULL,
+  `excluido` tinyint(3) unsigned DEFAULT '0',
+  `data_cadastro` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id_usuario`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `barsystems`.`usuarios`
+--
+
+
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
